@@ -121,11 +121,9 @@ const GameLogic = {
 
     if (player1TempScore == player2TempScore) {
       for (let i = 0; i < 5; i++) {
-        if (result1[1][i] - result2[1][i] > 0) {
-          player1TempScore++;
-          break;
-        } else if (result1[1][i] - result2[1][i] < 0) {
-          player2TempScore++;
+        const diff = result1[1][i] - result2[1][i];
+        if (diff != 0) {
+          diff > 0 ? ++player1TempScore : ++player2TempScore;
           break;
         }
       }
