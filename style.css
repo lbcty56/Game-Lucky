@@ -34,25 +34,30 @@ body {
 }
 
 @keyframes svgWithStrokeAppearAnimation {
+
   0%,
   100% {
     stroke: #d9acff;
     fill: #180161;
     stroke-dashoffset: 100;
   }
+
   25%,
   75% {
     fill: #4f1787;
     stroke-dashoffset: 100;
   }
+
   40%,
   60% {
     stroke-dashoffset: 0;
   }
+
   42%,
   58% {
     fill: #eb3678;
   }
+
   50% {
     stroke: rgb(191, 123, 255, 0.781);
     fill: #aeff00;
@@ -101,6 +106,7 @@ body {
 }
 
 @keyframes playerAnimation {
+
   0%,
   10%,
   40%,
@@ -109,6 +115,7 @@ body {
     color: var(--textColor);
     text-shadow: 0 0 10px var(--baseColor);
   }
+
   20%,
   30%,
   50%,
@@ -233,11 +240,9 @@ body {
 
 .pressToShakeAllbtn:hover {
   color: var(--btnColor);
-  background: linear-gradient(
-    45deg,
-    var(--leftGradientColor),
-    var(--rightGradientColor)
-  );
+  background: linear-gradient(45deg,
+      var(--leftGradientColor),
+      var(--rightGradientColor));
   box-shadow: 0 0 0.6rem 0.25rem var(--glowColor),
     0 0 4rem 2rem var(--glowSpreadColor),
     inset 0 0 0.75rem 0.25rem var(--glowColor);
@@ -249,11 +254,9 @@ body {
   top: 120%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(
-    45deg,
-    var(--leftGradientSpreadColor),
-    var(--rightGradientSpreadColor)
-  );
+  background: linear-gradient(45deg,
+      var(--leftGradientSpreadColor),
+      var(--rightGradientSpreadColor));
   filter: blur(2rem);
   opacity: 0.7;
   transform: perspective(2rem) rotateX(35deg) scale(1, 0.6);
@@ -269,7 +272,7 @@ body {
 #playersContainer {
   width: 100%;
   display: flex;
-  gap: 50px;
+  gap: 45px;
   flex-direction: row;
   justify-content: center;
   align-items: center;
@@ -282,109 +285,34 @@ body {
   width: 45%;
   flex-direction: column;
   align-items: center;
+  animation-delay: 1s;
 }
 
 .container {
   display: flex;
   place-items: center;
-  gap: 40px;
+  gap: 10px;
   height: 150px;
+}
+
+.dice-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .dice {
   cursor: pointer;
+  width: 100%;
+  height: 100%;
   position: relative;
-  width: 100px;
-  height: 100px;
-  transform-style: preserve-3d;
-  transition: 1.3s ease;
 }
 
-.face {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  border-radius: 20px;
-  border: 5px solid #f6f3f0;
-  transform-style: preserve-3d;
-  background: linear-gradient(145deg, #dddbd8, #fff);
-}
-
-.face::before {
-  position: absolute;
-  content: "";
-  width: 100%;
-  height: 100%;
-  border-radius: 20px;
-  background: #f6f3f0;
-  transform: translateZ(-1px);
-}
-
-.face::after {
-  position: absolute;
-  content: "";
-  top: 50%;
-  left: 50%;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: #131210;
-}
-
-.frontOne {
-  transform: translateZ(50px);
-}
-
-.backSix {
-  transform: translateZ(-50px) rotateX(180deg);
-}
-
-.topFive {
-  transform: rotateX(90deg) translateZ(50px);
-}
-
-.bottomTwo {
-  transform: rotateX(-90deg) translateZ(50px);
-}
-
-.leftFour {
-  transform: rotateY(-90deg) translateZ(50px);
-}
-
-.rightThree {
-  transform: rotateY(90deg) translateZ(50px);
-}
-
-.frontOne::after {
-  width: 30px;
-  height: 30px;
-  background: #f63330;
-  margin: -15px 0 0 -15px;
-}
-
-.backSix::after {
-  margin: -35px 0 0 -30px;
-  box-shadow: 40px 0, 0 25px, 40px 25px, 0 50px, 40px 50px;
-}
-
-.topFive::after {
-  margin: -35px 0 0 -35px;
-  box-shadow: 26px 26px, 52px 52px, 52px 0, 0 52px, 52px 0;
-}
-
-.bottomTwo::after {
-  margin: -30px 0 0 -30px;
-  box-shadow: 40px 40px;
-}
-
-.leftFour::after {
-  margin: -30px 0 0 -30px;
-  box-shadow: 40px 0, 40px 40px, 0 40px;
-}
-
-.rightThree::after {
-  margin: -35px 0 0 -35px;
-  box-shadow: 25px 25px, 50px 50px;
+.dice canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
 }
 
 .diceFireContainer1,
@@ -422,11 +350,9 @@ body {
   position: absolute;
   width: 10px;
   height: 100%;
-  background: radial-gradient(
-    circle at center,
-    var(--fireColor),
-    var(--fireSpreadColor)
-  );
+  background: radial-gradient(circle at center,
+      var(--fireColor),
+      var(--fireSpreadColor));
   border-radius: 50%;
   box-shadow: 0 0 0.5rem 0.25rem var(--fireSpreadColor);
 }
@@ -510,6 +436,7 @@ body {
   0% {
     background-position: 100%;
   }
+
   100% {
     background-position: -100%;
   }
@@ -519,20 +446,19 @@ body {
   animation: appearAnimation 3s linear infinite;
 }
 
-.player1Container {
-  animation-delay: 1s;
-}
-
 @keyframes appearAnimation {
   0% {
     opacity: 0;
   }
+
   50% {
     opacity: 0.7;
   }
+
   90% {
     opacity: 1;
   }
+
   0%,
   100% {
     transform: scaleX(-1) rotateZ(30deg);
@@ -548,12 +474,14 @@ body {
   #playersContainer {
     flex-direction: column;
   }
+
   #player1ScreenText,
   #player2ScreenText {
     height: 100px;
     font-size: 4rem;
     text-align: center;
   }
+
   #shakeAll {
     margin-bottom: 30px;
   }
