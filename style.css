@@ -294,14 +294,14 @@ body {
   height: 150px;
 }
 
-/* .dice {
+.dice {
   cursor: pointer;
   position: relative;
   width: 100px;
   height: 100px;
   transform-style: preserve-3d;
   transition: 1.3s ease;
-} */
+}
 
 .face {
   position: absolute;

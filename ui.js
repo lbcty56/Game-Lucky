@@ -1,5 +1,6 @@
 // ui.js - Contains the UI interactions
 import { GameState, GameLogic } from './game.js';
+import Dice3D from './dice.js';
 
 // Constants for dice rotation angles
 const rotateFaceAngleX = [0, 90, 0, 0, -90, 180];
@@ -35,10 +36,43 @@ const UI = {
   player1ScoreScreen: document.querySelector("#player1Rank"),
   player2ScoreScreen: document.querySelector("#player2Rank"),
 
+  // Dice instances
+  diceInstances: new Map(), // Store dice instances by position
+
   // Initialize all UI elements
   init() {
+    this.initializeDice();
     this.setupEventListeners();
     this.setupKeyboardControls();
+  },
+
+  initializeDice() {
+    // Initialize dice for both players
+    const player1Container = document.querySelector("#player1DiceContainer");
+    const player2Container = document.querySelector("#player2DiceContainer");
+
+    // Create 5 dice for each player
+    for (let i = 1; i <= 10; i++) {
+      const dice = new Dice3D();
+      const diceElement = dice.renderer.domElement;
+
+      // Configure dice element
+      diceElement.classList.add('dice');
+      diceElement.setAttribute('position', i);
+
+      // Create a wrapper div for each dice
+      const diceWrapper = document.createElement('div');
+      diceWrapper.className = 'dice-wrapper';
+      diceWrapper.style.width = '100%';
+      diceWrapper.style.height = '100%';
+      diceWrapper.appendChild(diceElement);
+
+      // Add to appropriate container
+      i <= 5 ? player1Container.appendChild(diceWrapper) : player2Container.appendChild(diceWrapper);
+
+      // Store dice instance
+      this.diceInstances.set(i, dice);
+    }
   },
 
   // Set up event listeners
@@ -157,38 +191,27 @@ const UI = {
   // Roll a single dice
   rollSingleDice(dice) {
     const position = Number(dice.getAttribute("position"));
-    const randomNumber = GameLogic.rollDice(position);
+    const diceInstance = this.diceInstances.get(position);
 
-    // Calculate rotation angles based on the random dice value
-    // const rotateX = rotateFaceAngleX[randomNumber - 1] + Math.floor(Math.random() * 9 - 4) * 360;
-    // const rotateY = rotateFaceAngleY[randomNumber - 1] + Math.floor(Math.random() * 9 - 4) * 360;
-    const rotateX = rotateFaceAngleX[randomNumber - 1];
-    const rotateY = rotateFaceAngleY[randomNumber - 1];
-
-    // Apply the rotation to the dice element
-    dice.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    if (diceInstance && !GameState.rollRecord[position]) {
+      clearTimeout(GameState.timeoutIDs[position]);
+      diceInstance.rollDice();
+    }
   },
 
   // Roll dice for a specific player (1 or 2)
   rollPlayerDice(playerId) {
     const startIndex = playerId === 1 ? 1 : 6;
-    const playerDice = playerId === 1 ? this.player1Dice : this.player2Dice;
+    const endIndex = startIndex + 4;
 
-    if (this.hasUnrolledDice(startIndex, startIndex + 4)) {
-      for (let i = startIndex; i <= startIndex + 4; i++) {
+    if (this.hasUnrolledDice(startIndex, endIndex)) {
+      for (let i = startIndex; i <= endIndex; i++) {
         if (!GameState.rollRecord[i]) {
-          clearTimeout(GameState.timeoutIDs[i]);
-          this.rollSingleDice(this.allPlayersDiceElements[i - 1]);
-
-          GameState.timeoutIDs[i] = setTimeout(() => {
-            GameState.rollRecord[i] = true;
-            this.updateDiceLighting();
-            this.updateButtonVisibility();
-
-            if (GameLogic.allDiceRolled()) {
-              this.processRollingResults();
-            }
-          }, 1300);
+          const diceInstance = this.diceInstances.get(i);
+          if (diceInstance) {
+            clearTimeout(GameState.timeoutIDs[i]);
+            diceInstance.rollDice();
+          }
         }
       }
     }
@@ -202,25 +225,10 @@ const UI = {
     // Clear all timeouts
     for (let i = 1; i <= 10; i++) {
       clearTimeout(GameState.timeoutIDs[i]);
-    }
-
-    // Roll all dice
-    for (let i = 0; i < this.allPlayersDiceElements.length; i++) {
-      const dice = this.allPlayersDiceElements[i];
-      this.rollSingleDice(dice);
-    }
-
-    // Set timeouts for completing the roll
-    for (let i = 1; i <= 10; i++) {
-      GameState.timeoutIDs[i] = setTimeout(() => {
-        GameState.rollRecord[i] = true;
-        this.updateDiceLighting();
-        this.updateButtonVisibility();
-
-        if (GameLogic.allDiceRolled()) {
-          this.processRollingResults();
-        }
-      }, 1300);
+      const diceInstance = this.diceInstances.get(i);
+      if (diceInstance) {
+        diceInstance.rollDice();
+      }
     }
   },
 
@@ -507,6 +515,16 @@ const UI = {
     return Object.values(GameState.rollRecord)
       .slice(startIndex - 1, endIndex + 1)
       .some(value => !value);
+  },
+
+  // Add cleanup method for Three.js resources
+  cleanup() {
+    this.diceInstances.forEach(dice => {
+      dice.renderer.dispose();
+      dice.scene.dispose();
+      // Clean up any other Three.js resources
+    });
+    this.diceInstances.clear();
   }
 };
 
@@ -514,3 +532,10 @@ const UI = {
 document.addEventListener('DOMContentLoaded', () => {
   UI.init();
 });
+
+// Add window cleanup
+window.addEventListener('beforeunload', () => {
+  UI.cleanup();
+});
+
+export default UI;
