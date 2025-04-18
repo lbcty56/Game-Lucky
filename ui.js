@@ -63,8 +63,8 @@ const UI = {
       // Create a wrapper div for each dice
       const diceWrapper = document.createElement('div');
       diceWrapper.className = 'dice-wrapper';
-      diceWrapper.style.width = '120px';
-      diceWrapper.style.height = '120px';
+      diceWrapper.style.width = '130px';
+      diceWrapper.style.height = '130px';
       diceWrapper.appendChild(diceElement);
 
       // Add to appropriate container

@@ -272,7 +272,7 @@ body {
 #playersContainer {
   width: 100%;
   display: flex;
-  gap: 30px;
+  gap: 45px;
   flex-direction: row;
   justify-content: center;
   align-items: center;
@@ -291,7 +291,7 @@ body {
 .container {
   display: flex;
   place-items: center;
-  gap: 15px;
+  gap: 10px;
   height: 150px;
 }
 
