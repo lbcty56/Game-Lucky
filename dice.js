@@ -12,11 +12,11 @@ class Dice3D {
     this.params = {
       // Lighting configuration
       ambientLightBrightness: 0.5,
-      directionalLightBrightness: 4,
+      directionalLightBrightness: 2.5,
       directionalLightPosition: { x: 1, y: 1, z: 5 },
 
       // Camera configuration
-      cameraPosition: { x: 0, y: 0, z: 5 },
+      cameraPosition: { x: 0, y: 0, z: 1.9 },
       cameraLookAt: { x: 0, y: 0, z: 0 },
 
       // Dice geometry configuration
@@ -25,7 +25,7 @@ class Dice3D {
         height: 1,
         depth: 1,
         segments: 2,
-        radius: 0.1
+        radius: 0.2
       },
 
       // Animation configuration
@@ -70,17 +70,7 @@ class Dice3D {
     this.scene = new THREE.Scene();
 
     // Set up camera
-    // const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
-    const aspect = 1;
-    const frustumSize = 2;
-    this.camera = new THREE.OrthographicCamera(
-      frustumSize * aspect / -2,
-      frustumSize * aspect / 2,
-      frustumSize / 2,
-      frustumSize / -2,
-      0.1,
-      1000
-    );
+    this.camera = new THREE.PerspectiveCamera( 45, 1, 0.1, 1000 );
     this.camera.position.set(
       this.params.cameraPosition.x,
       this.params.cameraPosition.y,
@@ -94,8 +84,8 @@ class Dice3D {
 
     // Set up renderer
     this.renderer = new THREE.WebGLRenderer( { antialias: true, alpha: true } );
-    this.renderer.setSize( 100, 100 ); // Match the CSS dimensions
-    this.renderer.setClearColor( 0x000000, 0 ); // Transparent background
+    this.renderer.setSize( 120, 120 ); // Match the CSS dimensions
+    this.renderer.setClearColor( '#000000', 0 ); // Transparent background
     document.body.appendChild( this.renderer.domElement );
 
     // Add lighting
@@ -151,7 +141,7 @@ class Dice3D {
 
       const material = new THREE.MeshStandardMaterial( {
         map: texture,
-        metalness: 0,
+        metalness: 0.1,
         roughness: 1,
       } );
 
