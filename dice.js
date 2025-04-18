@@ -6,7 +6,7 @@ import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeom
  * Uses Three.js for 3D rendering and canvas for dice face textures
  */
 class Dice3D {
-  constructor() {
+  constructor(rendererSize) {
 
     // Configuration parameters for the dice and its environment
     this.params = {
@@ -84,7 +84,7 @@ class Dice3D {
 
     // Set up renderer
     this.renderer = new THREE.WebGLRenderer( { antialias: true, alpha: true } );
-    this.renderer.setSize( 130, 130 ); // Match the CSS dimensions
+    this.renderer.setSize( rendererSize, rendererSize ); // Match the CSS dimensions
     this.renderer.setClearColor( '#000000', 0 ); // Transparent background
     document.body.appendChild( this.renderer.domElement );
 
@@ -165,10 +165,10 @@ class Dice3D {
     this.raycaster = new THREE.Raycaster();
     this.mouse = new THREE.Vector2();
 
-    // Add click event listener
-    this.renderer.domElement.addEventListener( 'click', ( event ) => {
-      this.handleClick( event );
-    } );
+    // // Add click event listener
+    // this.renderer.domElement.addEventListener( 'click', ( event ) => {
+    //   this.handleClick( event );
+    // } );
 
     // Start animation loop
     this.renderer.setAnimationLoop( () => {
@@ -231,6 +231,7 @@ class Dice3D {
 
     // Generate a random number between 1 and 6
     const randomNumber = Math.floor( Math.random() * 6 ) + 1;
+    this.diceValue = randomNumber;
 
     // Add some randomization to the animation (whole rotations)
     const spinCount = Math.floor( Math.random() * 3 + 3 ) * 360; // 3-5 full spins
@@ -239,9 +240,9 @@ class Dice3D {
     this.targetRotationX = THREE.MathUtils.degToRad( rotateFaceAngleX[randomNumber - 1] + spinCount );
     this.targetRotationY = THREE.MathUtils.degToRad( rotateFaceAngleY[randomNumber - 1] + spinCount );
 
+    // Start the animation
     this.isAnimating = true;
     this.animationStartTime = performance.now();
-    this.diceValue = randomNumber;
 
     // Add callback when animation completes
     this.onAnimationComplete = () => {

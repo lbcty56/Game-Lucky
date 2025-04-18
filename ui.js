@@ -38,6 +38,7 @@ const UI = {
 
   // Dice instances
   diceInstances: new Map(), // Store dice instances by position
+  diceSize: 130,
 
   // Initialize all UI elements
   init() {
@@ -53,7 +54,7 @@ const UI = {
 
     // Create 5 dice for each player
     for (let i = 1; i <= 10; i++) {
-      const dice = new Dice3D();
+      const dice = new Dice3D(this.diceSize);
       const diceElement = dice.renderer.domElement;
 
       // Configure dice element
@@ -63,8 +64,8 @@ const UI = {
       // Create a wrapper div for each dice
       const diceWrapper = document.createElement('div');
       diceWrapper.className = 'dice-wrapper';
-      diceWrapper.style.width = '130px';
-      diceWrapper.style.height = '130px';
+      diceWrapper.style.width = `${this.diceSize}px`;
+      diceWrapper.style.height = `${this.diceSize}px`;
       diceWrapper.appendChild(diceElement);
 
       // Add to appropriate container
@@ -125,19 +126,11 @@ const UI = {
 
     // Dice click events
     Array.from(this.allPlayersDiceElements).forEach((dice) => {
-      dice.addEventListener("click", () => {
+      dice.addEventListener("click", (event) => {
         const dicePosition = dice.getAttribute("position");
-        if (!GameState.rollRecord[dicePosition]) {
-          clearTimeout(GameState.timeoutIDs[dicePosition]);
-          this.rollSingleDice(dice);
-          GameState.timeoutIDs[dicePosition] = setTimeout(() => {
-            GameState.rollRecord[dicePosition] = true;
-            this.updateDiceLighting();
-            this.updateButtonVisibility();
-            if (GameLogic.allDiceRolled()) {
-              this.processRollingResults();
-            }
-          }, 1300);
+        const diceInstance = this.diceInstances.get(Number(dicePosition));
+        if (diceInstance && !GameState.rollRecord[dicePosition]) {
+          diceInstance.handleClick(event);
         }
       });
     });
