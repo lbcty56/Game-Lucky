@@ -72,6 +72,18 @@ const UI = {
 
       // Store dice instance
       this.diceInstances.set(i, dice);
+
+      // Set up dice completion callback
+      dice.onRollComplete = (value) => {
+        GameLogic.recordDice(i, value);
+        GameState.rollRecord[i] = true;
+        this.updateDiceLighting();
+        this.updateButtonVisibility();
+
+        if (GameLogic.allDiceRolled()) {
+          this.processRollingResults();
+        }
+      };
     }
   },
 

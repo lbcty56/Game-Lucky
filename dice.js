@@ -185,6 +185,9 @@ class Dice3D {
       this.animate();
       this.renderer.render( this.scene, this.camera );
     } );
+
+    // Add callback for roll completion
+    this.onRollComplete = null;
   }
 
   /**
@@ -249,6 +252,13 @@ class Dice3D {
     this.isAnimating = true;
     this.animationStartTime = performance.now();
     this.diceValue = randomNumber;
+
+    // Add callback when animation completes
+    this.onAnimationComplete = () => {
+      if ( this.onRollComplete ) {
+        this.onRollComplete( this.diceValue );
+      }
+    };
   }
 
   /**
@@ -276,6 +286,9 @@ class Dice3D {
         this.dice.rotation.x = this.targetRotationX;
         this.dice.rotation.y = this.targetRotationY;
         this.isAnimating = false;
+        if ( this.onAnimationComplete ) {
+          this.onAnimationComplete();
+        }
       }
     }
   }
