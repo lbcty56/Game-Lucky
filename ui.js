@@ -9,7 +9,6 @@ const rotateFaceAngleY = [0, 0, -90, 90, 0, 0];
 // DOM Elements
 const UI = {
   // Dice elements
-  allPlayersDiceElements: document.getElementsByClassName("dice"),
   player1Dice: document.querySelectorAll(".player1Container .dice"),
   player2Dice: document.querySelectorAll(".player2Container .dice"),
 
@@ -125,12 +124,10 @@ const UI = {
     });
 
     // Dice click events
-    Array.from(this.allPlayersDiceElements).forEach((dice) => {
-      dice.addEventListener("click", (event) => {
-        const dicePosition = dice.getAttribute("position");
-        const diceInstance = this.diceInstances.get(Number(dicePosition));
-        if (diceInstance && !GameState.rollRecord[dicePosition]) {
-          diceInstance.handleClick(event);
+    this.diceInstances.forEach((dice, position) => {
+      dice.renderer.domElement.addEventListener("click", (event) => {
+        if (!GameState.rollRecord[position]) {
+          dice.handleClick(event);
         }
       });
     });
@@ -179,29 +176,18 @@ const UI = {
           // Number keys for dice
           if (key >= "1" && key <= "9") {
             const diceIndex = parseInt(key, 10) - 1;
-            const dice = this.allPlayersDiceElements[diceIndex];
+            const dice = this.diceInstances.get(diceIndex + 1);
             if (dice) {
               dice.click();
             }
           } else if (key === "0") {
-            const dice = this.allPlayersDiceElements[9]; // 10th dice (index 9)
+            const dice = this.diceInstances.get(10); // 10th dice (index 9)
             if (dice) {
               dice.click();
             }
           }
       }
     });
-  },
-
-  // Roll a single dice
-  rollSingleDice(dice) {
-    const position = Number(dice.getAttribute("position"));
-    const diceInstance = this.diceInstances.get(position);
-
-    if (diceInstance && !GameState.rollRecord[position]) {
-      clearTimeout(GameState.timeoutIDs[position]);
-      diceInstance.rollDice();
-    }
   },
 
   // Roll dice for a specific player (1 or 2)
