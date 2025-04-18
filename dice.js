@@ -94,7 +94,7 @@ class Dice3D {
 
     // Set up renderer
     this.renderer = new THREE.WebGLRenderer( { antialias: true, alpha: true } );
-    this.renderer.setSize( window.innerWidth, window.innerHeight );
+    this.renderer.setSize( 100, 100 ); // Match the CSS dimensions
     this.renderer.setClearColor( 0x000000, 0 ); // Transparent background
     document.body.appendChild( this.renderer.domElement );
 
