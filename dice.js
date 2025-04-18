@@ -6,7 +6,7 @@ import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeom
  * Uses Three.js for 3D rendering and canvas for dice face textures
  */
 class Dice3D {
-  constructor(rendererSize) {
+  constructor( rendererSize ) {
 
     // Configuration parameters for the dice and its environment
     this.params = {
@@ -201,9 +201,12 @@ class Dice3D {
    * @param {MouseEvent} event - The click event
    */
   handleClick ( event ) {
-    // Calculate mouse position in normalized device coordinates
-    this.mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-    this.mouse.y = -( event.clientY / window.innerHeight ) * 2 + 1;
+    // Get the bounding rectangle of the renderer's DOM element
+    const rect = this.renderer.domElement.getBoundingClientRect();
+
+    // Calculate mouse position relative to the dice element
+    this.mouse.x = ( ( event.clientX - rect.left ) / rect.width ) * 2 - 1;
+    this.mouse.y = -( ( event.clientY - rect.top ) / rect.height ) * 2 + 1;
 
     // Update the picking ray with the camera and mouse position
     this.raycaster.setFromCamera( this.mouse, this.camera );
