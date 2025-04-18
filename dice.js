@@ -12,8 +12,8 @@ class Dice3D {
     this.params = {
       // Lighting configuration
       ambientLightBrightness: 0.5,
-      directionalLightBrightness: 2.5,
-      directionalLightPosition: { x: 1, y: 1, z: 5 },
+      directionalLightBrightness: 5,
+      directionalLightPosition: { x: 5, y: 5, z: 3 },
 
       // Camera configuration
       cameraPosition: { x: 0, y: 0, z: 1.9 },
@@ -24,7 +24,7 @@ class Dice3D {
         width: 1,
         height: 1,
         depth: 1,
-        segments: 2,
+        segments: 6,
         radius: 0.2
       },
 
